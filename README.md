@@ -20,6 +20,13 @@
 
 ข้อมูลบันทึกไว้ใน data/garden.json บนเครื่องที่เปิดเซิร์ฟเวอร์ สำรองไฟล์นี้ไว้เพื่อเก็บข้อมูล
 
+## Deploy บน Vercel
+
+- `vercel.json` ตั้งค่า output directory เป็น `frontend/dist` และมี API route สำหรับ Vercel Functions
+- ในโปรเจกต์ Vercel เปิด Storage แล้วสร้าง Blob store แบบ Private เพื่อให้ Vercel เพิ่ม `BLOB_READ_WRITE_TOKEN` ให้โปรเจกต์
+- เพิ่ม Environment Variable ชื่อ `APP_PASSWORD` สำหรับ Production และ Preview ใช้รหัสผ่านยาวที่คาดเดายาก แล้ว redeploy
+- สมาชิกในบ้านใช้รหัสผ่านแอปเดียวกันเพื่อเปิดข้อมูล ข้อมูลบน Vercel จะเก็บใน Blob แยกจาก `data/garden.json` บนเครื่อง จึงไม่ย้ายข้อมูลเดิมขึ้นไปให้อัตโนมัติ
+
 ## การคำนวณ
 
 - รายรับของแต่ละรอบคำนวณจากจำนวนลูกคูณราคาต่อลูก ณ วันที่บันทึก

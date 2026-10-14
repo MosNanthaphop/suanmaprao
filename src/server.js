@@ -180,7 +180,7 @@ async function handleRequest(request, response) {
   return serveStatic(pathname, response, request.method === 'HEAD');
 }
 
-const server = createServer(async (request, response) => {
+export async function handleRequestSafely(request, response) {
   try {
     await handleRequest(request, response);
   } catch (error) {
@@ -188,13 +188,16 @@ const server = createServer(async (request, response) => {
       response.destroy(error);
       return;
     }
-    const status = error instanceof HttpError ? error.status : 500;
+    const status = Number.isInteger(error.status) ? error.status : 500;
     if (status === 500) console.error(error);
     sendJson(response, status, { error: status === 500 ? 'เกิดข้อผิดพลาดในระบบ' : error.message });
   }
-});
+}
 
-server.listen(port, '0.0.0.0', () => {
+if (!process.env.VERCEL) {
+  const server = createServer(handleRequestSafely);
+  server.listen(port, '0.0.0.0', () => {
   console.log('API พร้อมที่ http://localhost:' + port);
   console.log('หน้า production ใช้พอร์ตนี้หลังจากรัน npm run build');
-});
+  });
+}

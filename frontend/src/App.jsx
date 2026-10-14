@@ -13,18 +13,50 @@ const initialData = {
   harvests: []
 };
 
-async function api(path, options = {}) {
+const authStorageKey = 'suanmaprao-app-password';
+
+function getStoredPassword() {
+  try {
+    return window.sessionStorage.getItem(authStorageKey) || '';
+  } catch {
+    return '';
+  }
+}
+
+async function api(path, options = {}, password = '') {
+  const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
+  if (password) headers.Authorization = `Bearer ${password}`;
   const response = await fetch(path, {
     ...options,
-    headers: { 'Content-Type': 'application/json', ...(options.headers || {}) }
+    headers
   });
-  const data = await response.json();
-  if (!response.ok) throw new Error(data.error || 'ไม่สามารถบันทึกข้อมูลได้');
+  const contentType = response.headers.get('content-type') || '';
+  if (!contentType.includes('application/json')) {
+    throw new Error(`API ตอบกลับไม่ใช่ JSON (HTTP ${response.status})`);
+  }
+
+  let data;
+  try {
+    data = await response.json();
+  } catch {
+    throw new Error(`อ่านคำตอบจาก API ไม่ได้ (HTTP ${response.status})`);
+  }
+
+  if (!response.ok) {
+    const error = new Error(data.error || 'ไม่สามารถบันทึกข้อมูลได้');
+    error.status = response.status;
+    throw error;
+  }
   return data;
 }
 
 export default function App() {
   const [data, setData] = useState(initialData);
+  const [password, setPassword] = useState(getStoredPassword);
+  const [passwordInput, setPasswordInput] = useState('');
+  const [authError, setAuthError] = useState('');
+  const [authLoading, setAuthLoading] = useState(true);
+  const [authenticated, setAuthenticated] = useState(false);
   const [activeView, setActiveView] = useState('overview');
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState(null);
@@ -47,17 +79,40 @@ export default function App() {
 
   useEffect(() => {
     let cancelled = false;
-    api('/api/state')
-      .then((next) => { if (!cancelled) setData(next); })
-      .catch((error) => { if (!cancelled) notify('เชื่อมต่อข้อมูลสวนไม่ได้: ' + error.message, 'error'); });
+    setAuthLoading(true);
+    api('/api/state', {}, password)
+      .then((next) => {
+        if (cancelled) return;
+        setData(next);
+        setAuthError('');
+        setAuthenticated(true);
+      })
+      .catch((error) => {
+        if (cancelled) return;
+        if (error.status === 401) {
+          setAuthenticated(false);
+          if (password) {
+            try { window.sessionStorage.removeItem(authStorageKey); } catch { /* Storage can be unavailable. */ }
+            setPassword('');
+            setPasswordInput('');
+            setAuthError('รหัสผ่านไม่ถูกต้อง กรุณาลองอีกครั้ง');
+          } else {
+            setAuthError('');
+          }
+        } else {
+          setAuthError(error.message);
+        }
+      })
+      .finally(() => { if (!cancelled) setAuthLoading(false); });
     return () => { cancelled = true; };
-  }, [notify]);
+  }, [notify, password]);
 
   useEffect(() => {
+    if (!authenticated) return undefined;
     const refresh = async () => {
       if (document.visibilityState !== 'visible' || dialogOpen || settingsDirty.current) return;
       try {
-        const latest = await api('/api/state');
+        const latest = await api('/api/state', {}, password);
         setData((current) => JSON.stringify(latest) === JSON.stringify(current) ? current : latest);
       } catch {
         // Keep the last loaded data visible if the server is briefly unavailable.
@@ -69,7 +124,7 @@ export default function App() {
       window.clearInterval(timer);
       document.removeEventListener('visibilitychange', refresh);
     };
-  }, [dialogOpen, activeView]);
+  }, [dialogOpen, activeView, authenticated, password]);
 
   useEffect(() => () => window.clearTimeout(toastTimer.current), []);
 
@@ -89,11 +144,29 @@ export default function App() {
     setDialogOpen(true);
   }
 
+  async function unlockApp(event) {
+    event.preventDefault();
+    setAuthLoading(true);
+    setAuthError('');
+    try {
+      const next = await api('/api/state', {}, passwordInput);
+      try { window.sessionStorage.setItem(authStorageKey, passwordInput); } catch { /* Keep this tab usable without storage. */ }
+      setData(next);
+      setAuthenticated(true);
+      setPassword(passwordInput);
+      setPasswordInput('');
+    } catch (error) {
+      setAuthError(error.message);
+    } finally {
+      setAuthLoading(false);
+    }
+  }
+
   async function saveHarvest(payload, id) {
     setBusy(true);
     try {
       const path = id ? '/api/harvests/' + encodeURIComponent(id) : '/api/harvests';
-      const next = await api(path, { method: id ? 'PUT' : 'POST', body: JSON.stringify(payload) });
+      const next = await api(path, { method: id ? 'PUT' : 'POST', body: JSON.stringify(payload) }, password);
       setData(next);
       setDialogOpen(false);
       notify(id ? 'แก้ไขข้อมูลรอบตัดแล้ว' : 'บันทึกรอบตัดเรียบร้อยแล้ว');
@@ -107,7 +180,7 @@ export default function App() {
   async function deleteHarvest(harvest) {
     if (!window.confirm('ลบรอบตัดวันที่ ' + formatDate(harvest.date) + ' ใช่ไหม?')) return;
     try {
-      const next = await api('/api/harvests/' + encodeURIComponent(harvest.id), { method: 'DELETE' });
+      const next = await api('/api/harvests/' + encodeURIComponent(harvest.id), { method: 'DELETE' }, password);
       setData(next);
       notify('ลบรอบตัดเรียบร้อยแล้ว');
     } catch (error) {
@@ -118,7 +191,7 @@ export default function App() {
   async function saveSettings(payload) {
     setBusy(true);
     try {
-      const next = await api('/api/settings', { method: 'PUT', body: JSON.stringify(payload) });
+      const next = await api('/api/settings', { method: 'PUT', body: JSON.stringify(payload) }, password);
       settingsDirty.current = false;
       setData(next);
       notify('บันทึกการตั้งค่าสวนแล้ว');
@@ -135,6 +208,40 @@ export default function App() {
     month: 'long',
     year: 'numeric'
   });
+
+  if (authLoading) {
+    return (
+      <main className="grid min-h-screen place-items-center bg-canvas px-4 text-sm text-slate-500">
+        กำลังเชื่อมต่อข้อมูลสวน…
+      </main>
+    );
+  }
+
+  if (!authenticated) {
+    return (
+      <main className="grid min-h-screen place-items-center bg-canvas px-4 py-8 text-ink">
+        <form className="w-full max-w-sm border border-line bg-white p-6 shadow-sm" onSubmit={unlockApp}>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-green">สวนมะพร้าว</p>
+          <h1 className="mt-2 text-xl font-bold">เข้าสู่ข้อมูลสวน</h1>
+          <p className="mt-2 text-sm leading-relaxed text-slate-500">กรอกรหัสผ่านที่ตั้งไว้ใน Environment Variables ของ Vercel</p>
+          <label className="mt-5 block text-xs font-medium text-slate-600" htmlFor="app-password">รหัสผ่านแอป</label>
+          <input
+            id="app-password"
+            className="mt-1 h-11 w-full rounded-md border border-line px-3 text-sm outline-none focus:border-green/50 focus:ring-4 focus:ring-green/10"
+            type="password"
+            autoComplete="current-password"
+            value={passwordInput}
+            onChange={(event) => setPasswordInput(event.target.value)}
+            required
+          />
+          {authError && <p className="mt-3 text-sm text-red-600" role="alert">{authError}</p>}
+          <button className="mt-5 h-11 w-full bg-green px-4 text-sm font-semibold text-white disabled:opacity-60" type="submit" disabled={authLoading}>
+            {authLoading ? 'กำลังตรวจสอบ…' : 'เข้าสู่ระบบ'}
+          </button>
+        </form>
+      </main>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-canvas text-ink">
