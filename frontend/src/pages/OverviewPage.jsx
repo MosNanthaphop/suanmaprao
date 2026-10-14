@@ -84,7 +84,7 @@ function ForecastCard({ harvests, cycleDays }) {
       <div>
         <div className="text-xs font-medium text-olive">รอบถัดไป</div>
         <p className="mt-5 text-xs text-slate-600">คาดว่าตัดครั้งต่อไป</p>
-        <h2 className="tabular mt-0.5 text-[27px] leading-relaxed font-semibold tracking-tight text-ink sm:text-[30px]">{formatDate(dueString)}</h2>
+        <h2 className="tabular mt-0.5 text-[27px] leading-relaxed font-semibold tracking-tight text-ink sm:text-[30px]">{formatDate(dueString, { year: '2-digit' })}</h2>
         <p className="mt-1 text-sm text-slate-600">{status}</p>
         <div className="mt-5 h-1 overflow-hidden bg-green/15" role="progressbar" aria-label="ความคืบหน้าของรอบตัด" aria-valuenow={Math.round(progress)} aria-valuemin="0" aria-valuemax="100">
           <span className="block h-full bg-green transition-all" style={{ width: progress + '%' }} />
@@ -150,9 +150,9 @@ export default function OverviewPage({ harvests, settings, onShowHistory }) {
         description="บันทึกรอบตัดและติดตามรายรับของสวน"
       />
       <div className="mb-4 grid grid-cols-2 divide-x divide-y divide-line border-y border-line bg-paper xl:mb-5 xl:grid-cols-4 xl:divide-y-0">
-        <MetricCard tone="clay" label="รายรับสะสม" value={formatMoney(totalIncome)} note="รวมทุกรอบที่บันทึก" />
+        <MetricCard tone="income" valueClassName="text-green-strong" emphasis label="รายรับสะสม" value={formatMoney(totalIncome)} note="รวมทุกรอบที่บันทึก" />
         <MetricCard label="มะพร้าวทั้งหมด" value={formatNumber(totalCoconuts)} unit="ลูก" note="ผลผลิตที่เก็บเกี่ยวแล้ว" />
-        <MetricCard tone="olive" label="วันที่ตัดล่าสุด" value={latest ? formatDate(latest.date, { day: 'numeric', month: 'short', year: undefined }) : '—'} unit={latest ? formatDate(latest.date, { year: 'numeric' }) : ''} note={latest ? 'บันทึกล่าสุดของสวน' : 'ยังไม่มีรอบตัด'} />
+        <MetricCard tone="olive" label="วันที่ตัดล่าสุด" value={latest ? formatDate(latest.date, { day: 'numeric', month: 'short', year: '2-digit' }) : '—'} note={latest ? 'บันทึกล่าสุดของสวน' : 'ยังไม่มีรอบตัด'} />
         <MetricCard tone="neutral" label="รอบตัดโดยประมาณ" value={formatNumber(settings.cycleDays)} unit="วัน" note="ปรับได้ในตั้งค่าสวน" />
       </div>
       <div className="grid gap-3 lg:grid-cols-[minmax(0,1.5fr)_minmax(270px,.9fr)] lg:gap-4">
