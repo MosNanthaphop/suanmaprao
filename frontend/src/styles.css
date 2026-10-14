@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+@theme {
+  --color-canvas: #f5f3ec;
+  --color-paper: #fffefa;
+  --color-sand: #eeede4;
+  --color-line: #e1dfd4;
+  --color-ink: #2c332b;
+  --color-green: #49624d;
+  --color-green-dark: #354a39;
+  --color-green-100: #e0e5d9;
+  --color-forest: #3f5744;
+  --color-lime: #e2e2bf;
+  --color-olive: #777448;
+  --color-terracotta: #a45d43;
+  --font-sans: "IBM Plex Sans Thai", "Leelawadee UI", sans-serif;
+}
+
+@layer base {
+  html { min-width: 320px; scroll-behavior: smooth; }
+  body { @apply m-0 min-w-[320px] bg-canvas font-sans text-ink; line-height: 1.65; }
+  button, input, select { font: inherit; }
+  button:focus-visible, input:focus-visible, select:focus-visible { @apply outline-2 outline-offset-2 outline-green/40; }
+  dialog::backdrop { background: rgb(31 39 31 / 42%); }
+}
+
+.chart-grid {
+  border-bottom: 1px solid #e8e6dc;
+  background: repeating-linear-gradient(to bottom, transparent 0, transparent 42px, var(--color-sand) 43px, transparent 44px);
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+  }
+}
