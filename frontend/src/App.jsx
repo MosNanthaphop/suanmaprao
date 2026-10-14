@@ -221,10 +221,10 @@ export default function App() {
     return (
       <main className="grid min-h-screen place-items-center bg-canvas px-4 py-8 text-ink">
         <form className="w-full max-w-sm border border-line bg-white p-6 shadow-sm" onSubmit={unlockApp}>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-green">สวนมะพร้าว</p>
+          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-green">สวนมะพร้าว</p>
           <h1 className="mt-2 text-xl font-bold">เข้าสู่ข้อมูลสวน</h1>
           <p className="mt-2 text-sm leading-relaxed text-slate-500">กรอกรหัสผ่านที่ตั้งไว้ใน Environment Variables ของ Vercel</p>
-          <label className="mt-5 block text-xs font-medium text-slate-600" htmlFor="app-password">รหัสผ่านแอป</label>
+          <label className="mt-5 block text-sm font-medium text-slate-600" htmlFor="app-password">รหัสผ่านแอป</label>
           <input
             id="app-password"
             className="mt-1 h-11 w-full rounded-md border border-line px-3 text-sm outline-none focus:border-green/50 focus:ring-4 focus:ring-green/10"
@@ -272,7 +272,7 @@ export default function App() {
               busy={busy}
             />
           )}
-          <footer className="flex justify-center gap-2 pt-6 text-[10px] text-slate-500">
+          <footer className="flex justify-center gap-2 pt-6 text-xs text-slate-500">
             <span>สวนมะพร้าว</span><span className="text-slate-400">·</span><span>ผลผลิตและรายรับ</span>
           </footer>
         </div>

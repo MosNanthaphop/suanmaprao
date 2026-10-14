@@ -5,7 +5,7 @@ import { formatDate, formatMoney, formatNumber, getTotal, sortHarvests } from '.
 function HarvestDate({ harvest }) {
   return (
     <div className="min-w-0">
-      <strong className="text-[11px] font-medium text-slate-700 sm:text-xs">{formatDate(harvest.date)}</strong>
+      <strong className="text-xs font-medium text-slate-700 sm:text-sm">{formatDate(harvest.date)}</strong>
     </div>
   );
 }
@@ -28,7 +28,7 @@ function EmptyHistory({ hasAny }) {
   return (
     <div className="grid justify-items-center px-4 py-12 text-center">
       <strong className="text-[13px] font-medium text-slate-600">{hasAny ? 'ไม่พบรายการที่ค้นหา' : 'ยังไม่มีบันทึกรอบตัด'}</strong>
-      <p className="mt-1 max-w-[290px] text-[10px] text-slate-400">{hasAny ? 'ลองเปลี่ยนคำค้นหาหรือตัวกรองปี แล้วค้นหาอีกครั้ง' : 'เริ่มเพิ่มข้อมูลรอบตัด เพื่อดูผลผลิตและรายรับย้อนหลังได้ที่นี่'}</p>
+      <p className="mt-1 max-w-[290px] text-xs text-slate-500">{hasAny ? 'ลองเปลี่ยนคำค้นหาหรือตัวกรองปี แล้วค้นหาอีกครั้ง' : 'เริ่มเพิ่มข้อมูลรอบตัด เพื่อดูผลผลิตและรายรับย้อนหลังได้ที่นี่'}</p>
     </div>
   );
 }
@@ -53,16 +53,16 @@ export default function HistoryPage({ harvests, onEdit, onDelete }) {
       <section className="border-y border-line bg-paper px-3 pt-4 pb-2 sm:px-5 sm:pt-[18px]">
         <div className="flex items-start justify-between gap-3 border-b border-line/70 pb-3.5 sm:items-center">
           <div className="grid">
-            <strong className="text-xs text-ink sm:text-sm">{formatNumber(items.length)} รอบตัด</strong>
-            <span className="text-[10px] text-slate-500">บันทึกทั้งหมด</span>
+            <strong className="text-sm text-ink sm:text-base">{formatNumber(items.length)} รอบตัด</strong>
+            <span className="text-xs text-slate-500">บันทึกทั้งหมด</span>
           </div>
           <div className="flex w-[56%] flex-col gap-1.5 sm:w-auto sm:flex-row sm:gap-2">
           <label className="flex min-h-10 items-center gap-2 rounded-md border border-line px-2.5 text-slate-500 sm:w-[188px]">
               <svg className="size-[15px] fill-none stroke-current stroke-[1.7]" aria-hidden="true"><use href="#icon-search" /></svg>
-              <input className="min-w-0 flex-1 bg-transparent text-[11px] text-slate-600 outline-none placeholder:text-slate-400" type="search" placeholder="ค้นหาหมายเหตุ" aria-label="ค้นหาหมายเหตุ" value={query} onChange={(event) => setQuery(event.target.value)} />
+              <input className="min-w-0 flex-1 bg-transparent text-xs text-slate-600 outline-none placeholder:text-slate-400" type="search" placeholder="ค้นหาหมายเหตุ" aria-label="ค้นหาหมายเหตุ" value={query} onChange={(event) => setQuery(event.target.value)} />
             </label>
             <label className="sr-only" htmlFor="history-year">เลือกปี</label>
-            <select id="history-year" className="min-h-10 rounded-md border border-line bg-white px-2.5 text-[11px] text-slate-600 outline-none" value={activeYear} onChange={(event) => setYear(event.target.value)}>
+            <select id="history-year" className="min-h-10 rounded-md border border-line bg-white px-2.5 text-xs text-slate-600 outline-none" value={activeYear} onChange={(event) => setYear(event.target.value)}>
               <option value="all">ทุกปี</option>
               {years.map((item) => <option value={item} key={item}>พ.ศ. {Number(item) + 543}</option>)}
             </select>
@@ -72,7 +72,7 @@ export default function HistoryPage({ harvests, onEdit, onDelete }) {
           <>
             <div className="hidden overflow-x-auto md:block">
               <table className="w-full border-collapse text-left">
-                <thead className="border-b border-line text-[10px] font-medium text-slate-500">
+                <thead className="border-b border-line text-xs font-medium text-slate-500">
                   <tr>
                     <th className="h-9 px-3">วันที่ตัด</th>
                     <th className="px-2 text-right">ผลผลิต</th>
@@ -84,11 +84,11 @@ export default function HistoryPage({ harvests, onEdit, onDelete }) {
                 </thead>
                 <tbody>
                   {items.map((harvest) => (
-                    <tr className="border-t border-line/70 text-[11px] text-slate-600" key={harvest.id}>
+                    <tr className="border-t border-line/70 text-xs text-slate-600" key={harvest.id}>
                       <td className="h-[54px] min-w-[150px] px-3"><HarvestDate harvest={harvest} /></td>
                       <td className="whitespace-nowrap px-2 text-right">{formatNumber(harvest.quantity)} ลูก</td>
                       <td className="whitespace-nowrap px-2 text-right">{formatMoney(harvest.pricePerCoconut)}</td>
-                      <td className="whitespace-nowrap px-2 text-right font-bold text-green">{formatMoney(getTotal(harvest))}</td>
+                    <td className="whitespace-nowrap px-2 text-right font-bold text-green">{formatMoney(getTotal(harvest))}</td>
                       <td className="max-w-[180px] truncate px-2 text-slate-400" title={harvest.note || ''}>{harvest.note || '—'}</td>
                       <td className="px-2"><HarvestActions harvest={harvest} onEdit={onEdit} onDelete={onDelete} /></td>
                     </tr>
@@ -101,13 +101,13 @@ export default function HistoryPage({ harvests, onEdit, onDelete }) {
                 <article className="border-t border-line/70 py-3" key={harvest.id}>
                   <div className="flex items-center justify-between gap-2">
                     <HarvestDate harvest={harvest} />
-                    <strong className="whitespace-nowrap text-xs font-bold text-green">{formatMoney(getTotal(harvest))}</strong>
+                  <strong className="whitespace-nowrap text-sm font-bold text-green">{formatMoney(getTotal(harvest))}</strong>
                   </div>
-                  <div className="ml-[38px] mt-2 flex justify-between gap-3 text-[10px] text-slate-500">
+                  <div className="ml-[38px] mt-2 flex justify-between gap-3 text-xs text-slate-500">
                     <span>ผลผลิต <strong className="font-semibold text-slate-600">{formatNumber(harvest.quantity)} ลูก</strong></span>
                     <span>ราคาต่อลูก <strong className="font-semibold text-slate-600">{formatMoney(harvest.pricePerCoconut)}</strong></span>
                   </div>
-                  {harvest.note && <p className="ml-[38px] mt-1 truncate text-[10px] text-slate-500">{harvest.note}</p>}
+                  {harvest.note && <p className="ml-[38px] mt-1 truncate text-xs text-slate-500">{harvest.note}</p>}
                   <div className="ml-[26px] mt-1"><HarvestActions harvest={harvest} onEdit={onEdit} onDelete={onDelete} /></div>
                 </article>
               ))}

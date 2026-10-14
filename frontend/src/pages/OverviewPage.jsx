@@ -24,7 +24,7 @@ function RevenueChart({ harvests, year }) {
             title={label + ' ' + formatMoney(amount)}
           />
         </div>
-        <span className="whitespace-nowrap text-[10px] text-slate-500">{label}</span>
+        <span className="whitespace-nowrap text-xs text-slate-500">{label}</span>
       </div>
     );
   });
@@ -33,17 +33,17 @@ function RevenueChart({ harvests, year }) {
     <section className="min-w-0 border-y border-line bg-paper px-3.5 py-4 sm:min-h-[295px] sm:px-5 sm:py-5">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <h2 className="text-[14px] font-semibold text-ink sm:text-[16px]">รายรับแต่ละเดือน</h2>
-          <span className="text-[11px] text-slate-500">แสดงเป็นบาท</span>
+          <h2 className="text-base font-semibold text-ink sm:text-lg">รายรับแต่ละเดือน</h2>
+          <span className="text-xs text-slate-500">แสดงเป็นบาท</span>
         </div>
-        <span className="text-[11px] font-medium text-slate-500">พ.ศ. {year + 543}</span>
+        <span className="text-xs font-medium text-slate-500">พ.ศ. {year + 543}</span>
       </div>
       <div className="relative mt-4 h-[166px] sm:mt-[17px] sm:h-[188px]">
         <div className="chart-grid absolute inset-0 flex items-end justify-between gap-1 px-1 pb-0.5">
           {months}
         </div>
         {!hasData && (
-          <p className="pointer-events-none absolute inset-x-0 top-[42%] text-center text-[11px] text-slate-500">ยังไม่มีรายรับในปีนี้</p>
+          <p className="pointer-events-none absolute inset-x-0 top-[42%] text-center text-xs text-slate-500">ยังไม่มีรายรับในปีนี้</p>
         )}
       </div>
     </section>
@@ -56,7 +56,7 @@ function ForecastCard({ harvests, cycleDays }) {
     return (
       <section className="min-h-[255px] border-y border-line border-l-[3px] border-l-green bg-sand px-5 py-5 sm:min-h-[295px] sm:px-[22px]">
         <div className="flex min-h-[215px] flex-col justify-center sm:min-h-[250px]">
-          <div className="text-[10px] font-medium text-olive">รอบถัดไป</div>
+          <div className="text-xs font-medium text-olive">รอบถัดไป</div>
           <h2 className="mt-4 text-[17px] font-semibold text-ink">เริ่มจากบันทึกรอบแรก</h2>
           <p className="mt-1 max-w-[250px] text-xs leading-relaxed text-slate-600">ใช้ปุ่ม “บันทึกรอบตัด” ด้านบนเพื่อเริ่มคำนวณวันตัดครั้งถัดไป</p>
         </div>
@@ -82,14 +82,14 @@ function ForecastCard({ harvests, cycleDays }) {
   return (
     <section className="min-h-[255px] border-y border-line border-l-[3px] border-l-green bg-sand px-5 py-5 sm:min-h-[295px] sm:px-[22px]">
       <div>
-        <div className="text-[10px] font-medium text-olive">รอบถัดไป</div>
-        <p className="mt-5 text-[11px] text-slate-600">คาดว่าตัดครั้งต่อไป</p>
-        <h2 className="tabular mt-0.5 text-[25px] leading-relaxed font-semibold tracking-tight text-ink sm:text-[27px]">{formatDate(dueString)}</h2>
-        <p className="mt-1 text-xs text-slate-600">{status}</p>
+        <div className="text-xs font-medium text-olive">รอบถัดไป</div>
+        <p className="mt-5 text-xs text-slate-600">คาดว่าตัดครั้งต่อไป</p>
+        <h2 className="tabular mt-0.5 text-[27px] leading-relaxed font-semibold tracking-tight text-ink sm:text-[30px]">{formatDate(dueString)}</h2>
+        <p className="mt-1 text-sm text-slate-600">{status}</p>
         <div className="mt-5 h-1 overflow-hidden bg-green/15" role="progressbar" aria-label="ความคืบหน้าของรอบตัด" aria-valuenow={Math.round(progress)} aria-valuemin="0" aria-valuemax="100">
           <span className="block h-full bg-green transition-all" style={{ width: progress + '%' }} />
         </div>
-        <div className="mt-2 flex justify-between gap-3 text-[10px] text-slate-600">
+        <div className="mt-2 flex justify-between gap-3 text-xs text-slate-600">
           <span>ตัดล่าสุด <strong className="font-medium text-ink">{formatDate(latest.date, { day: 'numeric', month: 'short' })}</strong></span>
           <span>รอบละ <strong className="font-medium text-ink">{formatNumber(cycleDays)} วัน</strong></span>
         </div>
@@ -104,31 +104,31 @@ function RecentList({ harvests, onShowHistory }) {
     <section className="mt-5 border-y border-line bg-paper px-3.5 pt-4 pb-2 sm:mt-6 sm:px-5 sm:pt-5">
       <div className="mb-2 flex items-end justify-between gap-3">
         <div>
-          <h2 className="text-[14px] font-semibold text-ink sm:text-[16px]">รอบตัดที่ผ่านมา</h2>
+          <h2 className="text-base font-semibold text-ink sm:text-lg">รอบตัดที่ผ่านมา</h2>
         </div>
-        <button className="flex min-h-9 items-center gap-1 text-[11px] font-semibold text-green/75 hover:text-green" type="button" onClick={onShowHistory}>
+        <button className="flex min-h-9 items-center gap-1 text-xs font-semibold text-green/75 hover:text-green" type="button" onClick={onShowHistory}>
           ดูประวัติทั้งหมด <Icon name="arrow" className="size-3.5" />
         </button>
       </div>
       {!items.length ? (
-        <div className="flex min-h-[90px] items-center justify-center border-t border-line/70 text-center text-[11px] text-slate-500">
+        <div className="flex min-h-[90px] items-center justify-center border-t border-line/70 text-center text-xs text-slate-500">
           บันทึกรอบตัดแรก แล้วข้อมูลล่าสุดจะแสดงตรงนี้
         </div>
       ) : items.map((harvest) => (
-        <div className="grid min-h-[58px] grid-cols-[minmax(0,1.3fr)_minmax(60px,.7fr)_minmax(67px,.7fr)] items-center gap-2 border-t border-line/70 sm:grid-cols-[minmax(0,1.3fr)_minmax(100px,.8fr)_minmax(90px,.7fr)] sm:gap-4" key={harvest.id}>
+        <div className="grid min-h-[62px] grid-cols-[minmax(0,1.3fr)_minmax(60px,.7fr)_minmax(76px,.7fr)] items-center gap-2 border-t border-line/70 sm:grid-cols-[minmax(0,1.3fr)_minmax(100px,.8fr)_minmax(90px,.7fr)] sm:gap-4" key={harvest.id}>
           <div className="min-w-0">
             <span className="grid min-w-0">
-              <strong className="truncate text-[11px] font-semibold text-slate-700 sm:text-xs">{formatDate(harvest.date)}</strong>
-              <small className="truncate text-[10px] text-slate-500">{harvest.note || 'รอบตัดมะพร้าว'}</small>
+              <strong className="truncate text-xs font-semibold text-slate-700 sm:text-sm">{formatDate(harvest.date)}</strong>
+              <small className="truncate text-xs text-slate-500">{harvest.note || 'รอบตัดมะพร้าว'}</small>
             </span>
           </div>
           <span className="grid">
-            <small className="text-[10px] text-slate-500">จำนวน</small>
-            <strong className="text-[10px] font-semibold text-slate-600 sm:text-xs">{formatNumber(harvest.quantity)} ลูก</strong>
+            <small className="text-xs text-slate-500">จำนวน</small>
+            <strong className="text-xs font-semibold text-slate-600 sm:text-sm">{formatNumber(harvest.quantity)} ลูก</strong>
           </span>
           <span className="grid">
-            <small className="text-[10px] text-slate-500">รายรับ</small>
-            <strong className="text-[11px] font-bold text-green sm:text-xs">{formatMoney(getTotal(harvest))}</strong>
+            <small className="text-xs text-slate-500">รายรับ</small>
+            <strong className="whitespace-nowrap text-xs font-bold text-green sm:text-sm">{formatMoney(getTotal(harvest))}</strong>
           </span>
         </div>
       ))}

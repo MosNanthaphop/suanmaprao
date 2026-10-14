@@ -34,8 +34,8 @@ export default function SettingsPage({ settings, onSave, onDirtyChange, busy }) 
       <form className="max-w-[790px] border-y border-line bg-paper px-4 pt-5 sm:px-[26px] sm:pt-6" onSubmit={submit}>
         <div className="border-b border-line/70 pb-4 sm:pb-5">
           <div>
-            <h2 className="text-sm font-bold text-ink sm:text-[15px]">ข้อมูลการเก็บเกี่ยว</h2>
-            <p className="mt-0.5 text-[11px] text-slate-500">ราคาใหม่จะใช้กับรอบตัดที่บันทึกหลังจากนี้</p>
+            <h2 className="text-base font-bold text-ink sm:text-lg">ข้อมูลการเก็บเกี่ยว</h2>
+            <p className="mt-0.5 text-xs text-slate-500">ราคาใหม่จะใช้กับรอบตัดที่บันทึกหลังจากนี้</p>
           </div>
         </div>
         <div className="grid gap-4 py-5 md:grid-cols-2 md:gap-6">
@@ -47,11 +47,11 @@ export default function SettingsPage({ settings, onSave, onDirtyChange, busy }) 
           </FormField>
         </div>
         <div className="flex flex-col items-start gap-3 border-t border-line/70 py-4 sm:min-h-[68px] sm:flex-row sm:items-center sm:justify-between">
-          <span className="flex items-center gap-1.5 text-[11px] text-slate-500"><Icon name="check" className="size-3.5 text-green/70" /> ข้อมูลจะบันทึกไว้ให้ทุกคนในบ้าน</span>
+          <span className="flex items-center gap-1.5 text-xs text-slate-500"><Icon name="check" className="size-3.5 text-green/70" /> ข้อมูลจะบันทึกไว้ให้ทุกคนในบ้าน</span>
           <Button type="submit" icon="check" disabled={busy || !dirty} className="w-full sm:w-auto">{busy ? 'กำลังบันทึก…' : 'บันทึกการตั้งค่า'}</Button>
         </div>
       </form>
-      <div className="mt-4 max-w-[790px] border-l-2 border-olive/50 pl-3.5 text-[11px] leading-relaxed text-slate-500 sm:text-xs">
+      <div className="mt-4 max-w-[790px] border-l-2 border-olive/50 pl-3.5 text-xs leading-relaxed text-slate-500 sm:text-[13px]">
         <p><strong className="mr-1 font-medium text-olive">หมายเหตุ</strong>วันที่ตัดครั้งถัดไปคำนวณจากจำนวนวันที่ตั้งไว้ สามารถปรับให้ตรงกับรอบจริงของสวนได้</p>
       </div>
     </>

@@ -76,8 +76,8 @@ export default function HarvestDialog({ open, editing, price, onClose, onSave, b
           <div className="flex items-center gap-3">
           <span className="grid size-9 place-items-center border border-line text-green"><Icon name="coconut" className="size-5" /></span>
             <span>
-              <small className="block text-[10px] text-slate-500">บันทึกผลผลิต</small>
-              <h2 id="harvest-dialog-title" className="text-[16px] font-bold text-ink">{editing ? 'แก้ไขรอบตัด' : 'เพิ่มรอบตัดใหม่'}</h2>
+              <small className="block text-xs text-slate-500">บันทึกผลผลิต</small>
+              <h2 id="harvest-dialog-title" className="text-lg font-bold text-ink">{editing ? 'แก้ไขรอบตัด' : 'เพิ่มรอบตัดใหม่'}</h2>
             </span>
           </div>
           <button className="grid size-9 place-items-center rounded-md bg-canvas text-slate-500 hover:text-slate-700" type="button" onClick={onClose} aria-label="ปิดหน้าต่าง"><Icon name="close" className="size-4" /></button>
@@ -96,9 +96,9 @@ export default function HarvestDialog({ open, editing, price, onClose, onSave, b
         <FormField className="mt-4" label={<>หมายเหตุ <small className="font-normal text-slate-400">(ไม่บังคับ)</small></>}>
           <input className="h-11 w-full rounded-md border border-line bg-white px-3 text-sm text-ink outline-none placeholder:text-slate-400 focus:border-green/50 focus:ring-4 focus:ring-green/10" type="text" maxLength="240" placeholder="เช่น รอบเช้า · แปลงหลังบ้าน" value={form.note} onChange={(event) => change('note', event.target.value)} />
         </FormField>
-        <div className="mt-5 flex items-center justify-between gap-3 rounded-md border border-green/15 bg-green/5 px-4 py-3">
-          <span className="text-[11px] text-slate-600">รายรับรอบนี้โดยประมาณ</span>
-          <strong className="text-[19px] font-bold tracking-tight text-green">{formatMoney(total)}</strong>
+        <div className="mt-5 flex items-center justify-between gap-3 rounded-md border border-green/10 bg-green/5 px-4 py-3">
+          <span className="text-xs text-slate-600">รายรับรอบนี้โดยประมาณ</span>
+          <strong className="text-[21px] font-bold tracking-tight text-green">{formatMoney(total)}</strong>
         </div>
         <div className="mt-5 flex justify-end gap-2">
           <Button type="button" variant="quiet" onClick={onClose}>ยกเลิก</Button>

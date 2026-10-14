@@ -10,7 +10,7 @@ const variants = {
 export default function Button({ children, icon, variant = 'primary', className = '', ...props }) {
   return (
     <button
-      className={'inline-flex min-h-10 items-center justify-center gap-2 rounded-md px-4 text-[13px] font-semibold transition-colors disabled:pointer-events-none disabled:opacity-55 ' +
+      className={'inline-flex min-h-11 items-center justify-center gap-2 rounded-md px-4 text-sm font-semibold transition-colors disabled:pointer-events-none disabled:opacity-55 ' +
         (variants[variant] || variants.primary) + ' ' + className}
       {...props}
     >

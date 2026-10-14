@@ -18,7 +18,7 @@ function NavItem({ item, activeView, onChange, count, mobile = false }) {
         onClick={() => onChange(item.id)}
       >
         <Icon name={item.icon} className="size-5" />
-        <span className="text-[10px]">{item.shortLabel}</span>
+        <span className="text-xs">{item.shortLabel}</span>
       </button>
     );
   }
@@ -35,7 +35,7 @@ function NavItem({ item, activeView, onChange, count, mobile = false }) {
       <Icon name={item.icon} className="size-5" />
       <span className="hidden text-xs xl:block">{item.label}</span>
       {item.id === 'history' && (
-        <span className={'hidden min-w-6 rounded-full px-1.5 py-0.5 text-center text-[10px] xl:ml-auto xl:inline-block ' + (active ? 'bg-green/10 text-green' : 'bg-slate-100 text-slate-500')}>
+        <span className={'hidden min-w-6 rounded-full px-1.5 py-0.5 text-center text-xs xl:ml-auto xl:inline-block ' + (active ? 'bg-green/10 text-green' : 'bg-slate-100 text-slate-500')}>
           {count}
         </span>
       )}
@@ -52,10 +52,10 @@ export function Sidebar({ activeView, onChange, count }) {
         </span>
         <span className="hidden min-w-0 xl:grid">
           <strong className="text-[17px] leading-snug tracking-tight text-ink">สวนสุรชัย</strong>
-          <small className="text-[11px] text-slate-400">บันทึกของบ้านเรา</small>
+          <small className="text-xs text-slate-500">บันทึกของบ้านเรา</small>
         </span>
       </div>
-      <span className="mb-2 hidden px-3 text-[10px] font-bold tracking-[1.2px] text-slate-400 xl:block">เมนูหลัก</span>
+      <span className="mb-2 hidden px-3 text-xs font-bold tracking-[1.2px] text-slate-500 xl:block">เมนูหลัก</span>
       <nav className="grid gap-1.5" aria-label="เมนูหลัก">
         {items.map((item) => <NavItem key={item.id} {...{ item, activeView, onChange, count }} />)}
       </nav>
@@ -63,8 +63,8 @@ export function Sidebar({ activeView, onChange, count }) {
         <div className="flex items-center gap-2.5 border-t border-line py-3">
           <span className="size-1.5 shrink-0 rounded-full bg-green/70" />
           <span className="grid">
-            <strong className="text-[11px] font-medium text-ink">บันทึกอัตโนมัติ</strong>
-            <small className="text-[10px] text-slate-500">ข้อมูลของสวนนี้</small>
+            <strong className="text-xs font-medium text-ink">บันทึกอัตโนมัติ</strong>
+            <small className="text-xs text-slate-600">ข้อมูลของสวนนี้</small>
           </span>
         </div>
       </div>
@@ -83,8 +83,8 @@ export function MobileNav({ activeView, onChange }) {
 export function TopBar({ date, onAdd }) {
   return (
     <header className="flex min-h-[70px] items-center justify-between border-b border-line sm:min-h-[83px]">
-      <div className="grid gap-0.5 text-xs text-slate-500">
-        <span className="text-[10px] text-slate-500">จัดการสวน · บ้านเรา</span>
+      <div className="grid gap-0.5 text-sm text-slate-600">
+        <span className="text-xs text-slate-600">จัดการสวน · บ้านเรา</span>
         <span>{date}</span>
       </div>
       <Button icon="plus" onClick={onAdd} className="min-h-10 px-3 sm:px-4">
