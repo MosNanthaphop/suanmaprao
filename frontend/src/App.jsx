@@ -223,8 +223,7 @@ export default function App() {
         <form className="w-full max-w-sm border border-line bg-white p-6 shadow-sm" onSubmit={unlockApp}>
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-green">สวนมะพร้าว</p>
           <h1 className="mt-2 text-xl font-bold">เข้าสู่ข้อมูลสวน</h1>
-          <p className="mt-2 text-sm leading-relaxed text-slate-500">กรอกรหัสผ่านที่ตั้งไว้ใน Environment Variables ของ Vercel</p>
-          <label className="mt-5 block text-sm font-medium text-slate-600" htmlFor="app-password">รหัสผ่านแอป</label>
+          <label className="mt-5 block text-sm font-medium text-slate-600" htmlFor="app-password">รหัสผ่านของสวน</label>
           <input
             id="app-password"
             className="mt-1 h-11 w-full rounded-md border border-line px-3 text-sm outline-none focus:border-green/50 focus:ring-4 focus:ring-green/10"
