@@ -27,7 +27,7 @@ function HarvestActions({ harvest, onEdit, onDelete }) {
 function EmptyHistory({ hasAny }) {
   return (
     <div className="grid justify-items-center px-4 py-12 text-center">
-      <strong className="text-[13px] font-medium text-slate-600">{hasAny ? 'ไม่พบรายการที่ค้นหา' : 'ยังไม่มีบันทึกรอบตัด'}</strong>
+      <strong className="text-sm font-medium text-slate-600">{hasAny ? 'ไม่พบรายการที่ค้นหา' : 'ยังไม่มีบันทึกรอบตัด'}</strong>
       <p className="mt-1 max-w-[290px] text-xs text-slate-500">{hasAny ? 'ลองเปลี่ยนคำค้นหาหรือตัวกรองปี แล้วค้นหาอีกครั้ง' : 'เริ่มเพิ่มข้อมูลรอบตัด เพื่อดูผลผลิตและรายรับย้อนหลังได้ที่นี่'}</p>
     </div>
   );

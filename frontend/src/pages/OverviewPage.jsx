@@ -1,9 +1,14 @@
+import { useState } from 'react';
 import Icon from '../components/ui/Icon.jsx';
 import MetricCard from '../components/ui/MetricCard.jsx';
 import PageIntro from '../components/ui/PageIntro.jsx';
 import { dayDifference, dateFromString, formatDate, formatMoney, formatNumber, getTotal, localDateString, sortHarvests } from '../lib/formatters.js';
 
+const monthLabels = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+const monthNames = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
+
 function RevenueChart({ harvests, year }) {
+  const [selectedMonth, setSelectedMonth] = useState(() => new Date().getMonth());
   const totals = Array.from({ length: 12 }, () => 0);
   harvests.forEach((harvest) => {
     const date = dateFromString(harvest.date);
@@ -12,40 +17,58 @@ function RevenueChart({ harvests, year }) {
   const max = Math.max(...totals, 1);
   const hasData = totals.some((amount) => amount > 0);
   const months = Array.from({ length: 12 }, (_, index) => {
-    const label = new Intl.DateTimeFormat('th-TH-u-ca-buddhist', { month: 'short' }).format(new Date(year, index, 1, 12));
+    const label = monthLabels[index];
     const amount = totals[index];
     const height = amount ? Math.max(12, (amount / max) * 100) : 3;
     return (
-      <div className="group relative z-0 flex h-full min-w-0 flex-1 flex-col items-center justify-end gap-1.5" key={index}>
-        <div className="flex h-full w-full flex-1 items-end justify-center">
+      <button
+        aria-label={'รายรับเดือน' + monthNames[index] + ' พ.ศ. ' + (year + 543) + ' ' + formatMoney(amount)}
+        aria-pressed={selectedMonth === index}
+        className="group relative z-0 flex h-full min-w-[30px] flex-1 flex-col items-center justify-end gap-1.5 rounded-t focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-green"
+        key={index}
+        title={monthNames[index] + ' ' + formatMoney(amount)}
+        type="button"
+        onClick={() => setSelectedMonth(index)}
+        onFocus={() => setSelectedMonth(index)}
+        onMouseEnter={() => setSelectedMonth(index)}
+      >
+        <span aria-hidden="true" className="flex h-full w-full flex-1 items-end justify-center">
           <span
-            className={'w-[min(15px,58%)] transition-colors group-hover:bg-terracotta ' + (amount ? 'bg-green/80' : 'bg-green/10')}
+            className={'w-[min(15px,58%)] transition-colors ' + (selectedMonth === index ? 'bg-terracotta' : amount ? 'bg-green/80' : 'bg-green/10')}
             style={{ height: height + '%' }}
-            title={label + ' ' + formatMoney(amount)}
           />
-        </div>
-        <span className="whitespace-nowrap text-xs text-slate-500">{label}</span>
-      </div>
+        </span>
+        <span aria-hidden="true" className="whitespace-nowrap text-xs text-slate-500">{label}</span>
+      </button>
     );
   });
 
   return (
-    <section className="min-w-0 border-y border-line bg-paper px-3.5 py-4 sm:min-h-[295px] sm:px-5 sm:py-5">
+    <section aria-labelledby="revenue-chart-title" className="min-w-0 border-y border-line bg-paper px-3.5 py-4 sm:min-h-[295px] sm:px-5 sm:py-5">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <h2 className="text-base font-semibold text-ink sm:text-lg">รายรับแต่ละเดือน</h2>
-          <span className="text-xs text-slate-500">แสดงเป็นบาท</span>
+          <h2 className="text-base font-semibold text-ink sm:text-lg" id="revenue-chart-title">รายรับแต่ละเดือน</h2>
+          <span className="text-xs text-slate-500">เลือกแท่งกราฟเพื่อดูยอด</span>
         </div>
         <span className="text-xs font-medium text-slate-500">พ.ศ. {year + 543}</span>
       </div>
-      <div className="relative mt-4 h-[166px] sm:mt-[17px] sm:h-[188px]">
-        <div className="chart-grid absolute inset-0 flex items-end justify-between gap-1 px-1 pb-0.5">
-          {months}
+      <div aria-live="polite" className="mt-2 flex min-h-6 items-center justify-between gap-3 text-xs">
+        <span className="text-slate-500">{monthLabels[selectedMonth]}</span>
+        <strong className="tabular font-semibold text-green">{formatMoney(totals[selectedMonth])}</strong>
+      </div>
+      <div className="relative mt-2 h-[166px] sm:mt-2.5 sm:h-[188px]">
+        <div className="h-full overflow-x-auto overscroll-x-contain pb-1 touch-pan-x">
+          <div className="relative h-full min-w-[392px] sm:min-w-0">
+            <div aria-label="เลือกรายรับแต่ละเดือน" className="chart-grid absolute inset-0 flex items-end justify-between gap-0.5 px-1 pb-0.5" role="group">
+              {months}
+            </div>
+          </div>
         </div>
         {!hasData && (
           <p className="pointer-events-none absolute inset-x-0 top-[42%] text-center text-xs text-slate-500">ยังไม่มีรายรับในปีนี้</p>
         )}
       </div>
+      <p className="mt-1 text-center text-xs text-slate-400 sm:hidden">ปัดซ้ายหรือขวาเพื่อดูครบ 12 เดือน</p>
     </section>
   );
 }
@@ -57,7 +80,7 @@ function ForecastCard({ harvests, cycleDays }) {
       <section className="min-h-[255px] border-y border-line border-l-[3px] border-l-green bg-sand px-5 py-5 sm:min-h-[295px] sm:px-[22px]">
         <div className="flex min-h-[215px] flex-col justify-center sm:min-h-[250px]">
           <div className="text-xs font-medium text-olive">รอบถัดไป</div>
-          <h2 className="mt-4 text-[17px] font-semibold text-ink">เริ่มจากบันทึกรอบแรก</h2>
+          <h2 className="mt-4 text-lg font-semibold text-ink">เริ่มจากบันทึกรอบแรก</h2>
           <p className="mt-1 max-w-[250px] text-xs leading-relaxed text-slate-600">ใช้ปุ่ม “บันทึกรอบตัด” ด้านบนเพื่อเริ่มคำนวณวันตัดครั้งถัดไป</p>
         </div>
       </section>
@@ -84,7 +107,7 @@ function ForecastCard({ harvests, cycleDays }) {
       <div>
         <div className="text-xs font-medium text-olive">รอบถัดไป</div>
         <p className="mt-5 text-xs text-slate-600">คาดว่าตัดครั้งต่อไป</p>
-        <h2 className="tabular mt-0.5 text-[27px] leading-relaxed font-semibold tracking-tight text-ink sm:text-[30px]">{formatDate(dueString, { year: '2-digit' })}</h2>
+        <h2 className="tabular mt-0.5 text-[28px] leading-relaxed font-semibold tracking-tight text-ink sm:text-[32px]">{formatDate(dueString, { year: '2-digit' })}</h2>
         <p className="mt-1 text-sm text-slate-600">{status}</p>
         <div className="mt-5 h-1 overflow-hidden bg-green/15" role="progressbar" aria-label="ความคืบหน้าของรอบตัด" aria-valuenow={Math.round(progress)} aria-valuemin="0" aria-valuemax="100">
           <span className="block h-full bg-green transition-all" style={{ width: progress + '%' }} />

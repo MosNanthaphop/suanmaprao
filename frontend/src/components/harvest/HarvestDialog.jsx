@@ -98,7 +98,7 @@ export default function HarvestDialog({ open, editing, price, onClose, onSave, b
         </FormField>
         <div className="mt-5 flex items-center justify-between gap-3 rounded-md border border-green/10 bg-green/5 px-4 py-3">
           <span className="text-xs text-slate-600">รายรับรอบนี้โดยประมาณ</span>
-          <strong className="text-[21px] font-bold tracking-tight text-green">{formatMoney(total)}</strong>
+          <strong className="text-2xl font-bold tracking-tight text-green">{formatMoney(total)}</strong>
         </div>
         <div className="mt-5 flex justify-end gap-2">
           <Button type="button" variant="quiet" onClick={onClose}>ยกเลิก</Button>

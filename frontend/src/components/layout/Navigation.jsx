@@ -51,7 +51,7 @@ export function Sidebar({ activeView, onChange, count }) {
           <Icon name="coconut" className="size-6" />
         </span>
         <span className="hidden min-w-0 xl:grid">
-          <strong className="text-[17px] leading-snug tracking-tight text-ink">สวนสุรชัย</strong>
+          <strong className="text-lg leading-snug tracking-tight text-ink">สวนสุรชัย</strong>
           <small className="text-xs text-slate-500">บันทึกของบ้านเรา</small>
         </span>
       </div>

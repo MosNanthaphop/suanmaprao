@@ -51,7 +51,7 @@ export default function SettingsPage({ settings, onSave, onDirtyChange, busy }) 
           <Button type="submit" icon="check" disabled={busy || !dirty} className="w-full sm:w-auto">{busy ? 'กำลังบันทึก…' : 'บันทึกการตั้งค่า'}</Button>
         </div>
       </form>
-      <div className="mt-4 max-w-[790px] border-l-2 border-olive/50 pl-3.5 text-xs leading-relaxed text-slate-500 sm:text-[13px]">
+      <div className="mt-4 max-w-[790px] border-l-2 border-olive/50 pl-3.5 text-xs leading-relaxed text-slate-500 sm:text-sm">
         <p><strong className="mr-1 font-medium text-olive">หมายเหตุ</strong>วันที่ตัดครั้งถัดไปคำนวณจากจำนวนวันที่ตั้งไว้ สามารถปรับให้ตรงกับรอบจริงของสวนได้</p>
       </div>
     </>
